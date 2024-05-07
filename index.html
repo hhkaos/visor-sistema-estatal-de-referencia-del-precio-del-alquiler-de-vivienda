@@ -1,0 +1,122 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Sistema Estatal de Referencia del Precio del Alquiler de Vivienda</title>
+
+    
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.29/"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      .github-fork-ribbon:before { background-color: #333; }
+      #titleDiv {
+        font-weight: 400;
+        font-style: normal;
+        font-size: 1.2019rem;
+        padding: 10px;
+      }
+      small{
+        font-size: .9rem
+      }
+    </style>
+    
+    <script>
+      require([
+        "esri/Map", 
+        "esri/views/MapView",
+         "esri/layers/Layer",
+        "esri/widgets/Search",
+        "esri/widgets/Legend",
+        "esri/config"
+      ], (
+        Map, 
+        MapView,
+        Layer,
+        Search,
+        Legend,
+        esriConfig
+      ) => {
+        esriConfig.apiKey = "AAPK4b966d487b7041cd88862128d5e01fa0QCPhfNILb_OzU88dcFCcMkr1ityPoHM0746IUDC7XKpUv3Wx9wWK147YQ38Bs69n";
+        const map = new Map({
+          basemap: {
+            style: { // autocasts to BasemapStyle
+              id: "arcgis/light-gray/base",
+              language: "es" // place labels will be displayed in spanish
+            }
+          }
+        });
+
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [-3.957290, 40.407317],
+          zoom: 6
+        });
+        view.ui.empty("top-left");
+        const titleDiv = document.getElementById("titleDiv");
+        view.ui.add(titleDiv, "top-left");
+
+        const featureLayer = Layer.fromPortalItem({
+          portalItem: {
+            // autocasts as new PortalItem()
+            id: "eb69996c1f744a3ebbacc8813b797269"
+          }
+        })
+        
+        map.add(featureLayer);
+
+        const referenceLayer = Layer.fromPortalItem({
+          portalItem: {
+            // autocasts as new PortalItem()
+            id: "3ffec1551cd14606a286622c634b0bb4"
+          }
+        });
+        map.add(referenceLayer);
+        
+        const searchWidget = new Search({
+          view: view
+        });
+
+        // Add the search widget to the top right corner of the view
+        view.ui.add(searchWidget, {
+          position: "bottom-left"
+        });
+
+        featureLayer.then(l => {
+          const legend = new Legend({
+          view: view,
+          layerInfos: [
+            {
+              layer: l,
+              title: "Precio de la vivienda en España"
+            }
+          ]
+        });
+        view.ui.add(legend, "bottom-right");
+        })
+        
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv">
+      <div id="titleDiv" class="esri-widget">
+        Sistema Estatal de Referencia del Precio del Alquiler de Vivienda 💶 <small>
+        <br/> <a href="https://www.arcgis.com/home/item.html?id=cdda9092a8d74bcdb76c32b3904d84d3">Fuente de los datos</a> | <a href="https://www.esri.es/es-es/acerca-de/contacto/contacto">Contacto</a></small>
+      </div>
+    </div>
+    <a class="github-fork-ribbon fixed" href="https://github.com/hhkaos/visor-sistema-estatal-de-referencia-del-precio-del-alquiler-de-vivienda" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+  </body>
+</html>
